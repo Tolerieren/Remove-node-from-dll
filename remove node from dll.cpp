@@ -1,4 +1,3 @@
-
 # include <stdlib.h>
 # include <stdio.h>
 
@@ -24,12 +23,18 @@ int main()
 	root = { 0,&a,&d };
 	Node* rootp = &root;
 
-	dll_remove(rootp, &b);
+	dll_remove(rootp, &d);
 
-	while ((rootp=rootp->fwd)!=NULL)
-	{
+	rootp = rootp->fwd;
+	if (rootp== NULL)
+		puts("Empty linklist");
+	else
+		while (rootp!=NULL)
+		{
 		printf("%d ", rootp->value);
-	}
+		rootp = rootp->fwd;
+		}
+	
 
 	return 0;
 }
@@ -58,25 +63,34 @@ int dll_remove( Node* rootp, Node* node)
 
      if ((next->fwd)!= NULL)
 	{
-		if (current != rootp)
+		if (current != rootp)    //中间
 		{
 			next = next->fwd;
 			current->fwd = next;
 			next->bwd = current;
-		}
-		else
+			node->bwd = NULL;
+		} 
+		else                      //起始 
 		{
 			next = node->fwd;
 			rootp->fwd = next;
 			next->bwd = NULL;
-
 		}
 	}
 	else
 	{
-		 current->fwd = NULL;
-		 node->bwd = NULL;
-		 rootp->bwd = current;
+	
+		 if(current!=rootp)
+		 {
+			 current->fwd = NULL;             //尾部
+			 node->bwd = NULL;
+			 rootp->bwd = current;
+		 }
+		 else
+		 {
+			 rootp->fwd = NULL;
+			 rootp->bwd = NULL;
+		 }
 	}
 
 	 return TRUE;
